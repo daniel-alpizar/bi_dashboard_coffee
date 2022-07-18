@@ -230,5 +230,7 @@ def plotly_choropleth(df, geojson):
             clickmode='event+select'
             )
 
-    plot_div = plot(fig, output_type='div', include_plotlyjs=False)
-    return plot_div
+    # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+    # return plot_div
+    chart = fig.to_html()
+    return chart
