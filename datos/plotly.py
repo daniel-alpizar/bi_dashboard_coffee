@@ -86,8 +86,10 @@ def plotly_gantt(dt):
     fig.update_traces(marker_line_color='rgb(8,48,107)',
                       marker_line_width=1.5, opacity=0.95)
 
-    plot_div = plot(fig, output_type='div', include_plotlyjs=False)
-    return plot_div
+    # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+    # return plot_div
+    chart = fig.to_html()
+    return chart
 
 
 def plotly_treemap(df):
@@ -203,8 +205,10 @@ def plotly_treemap_title(df):
             'xanchor': 'left',
             'yanchor': 'top'})
 
-    plot_div = plot(fig, output_type='div', include_plotlyjs=False)
-    return plot_div
+    # plot_div = plot(fig, output_type='div', include_plotlyjs=False)
+    # return plot_div
+    chart = fig.to_html()
+    return chart
 
 
 def plotly_choropleth(df, geojson):
