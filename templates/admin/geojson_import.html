@@ -1,0 +1,14 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <div>
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <label>Subir GeoJSON:</label>
+            <input type="file" name="file">
+            <p></p>
+            <button type="submit">Cargar archivo</button>
+        </form>
+    </div>
+{% endblock %}

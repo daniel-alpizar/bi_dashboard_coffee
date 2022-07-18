@@ -1,0 +1,10 @@
+{%  extends "datos/base.html" %}
+{% load static %}
+
+{% block content %}
+    {% load plotly_dash %}
+<!-- <h1>Treemap Chart!!</h1> -->
+
+    {{ treemap | safe }}
+
+{% endblock %}

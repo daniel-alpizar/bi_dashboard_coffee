@@ -1,0 +1,49 @@
+{%  extends "datos/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid content-row">
+
+  <div class="row">
+
+
+    <div class="col-md-2 mt-4">
+      <div class="card text-white bg-primary mb-3" style="max-width: 10rem;">
+        <div class="card-header">Area Total</div>
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card </p>
+        </div>
+      </div>
+
+      <div class="card text-white bg-secondary mb-3" style="max-width: 10rem;">
+        <div class="card-header">Parcelas</div>
+        <div class="card-body">
+          <p class="card-text">Some </p>
+        </div>
+      </div>
+
+      <div class="card text-white bg-success mb-3" style="max-width: 10rem;">
+        <div class="card-header">Cosechas</div>
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card </p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-lg-10">
+
+      {% load plotly_dash %}
+      {% plotly_header %}
+      {% plotly_direct name='homepage' %}
+      {% plotly_footer %}
+
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

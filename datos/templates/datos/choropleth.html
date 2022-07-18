@@ -1,0 +1,9 @@
+{%  extends "datos/base.html" %}
+{% load static %}
+
+{% block content %}
+    {% load plotly_dash %}
+
+    {{ choropleth | safe }}
+
+{% endblock %}

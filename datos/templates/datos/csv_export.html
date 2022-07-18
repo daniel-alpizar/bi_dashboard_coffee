@@ -1,0 +1,29 @@
+{%  extends "datos/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Exportar datos
+{% endblock title %}
+
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-body">
+
+      <p><b>Exportar datos:</b></p>
+      <form action="" method="POST">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary mt-3" name="button">Enviar</button>
+      </form>
+    </div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+<!-- <a href="{% url 'csv_export' %}">Export data</a> -->

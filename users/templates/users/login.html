@@ -1,0 +1,33 @@
+{% extends "datos/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Login
+{% endblock title %}
+
+{% block content %}
+
+<div class="col-md-4">
+  <div class="content-section">
+      <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Iniciar sesión</legend>
+              {{ form|crispy }}
+          </fieldset>
+          <div class="form-group pt-3">
+              <button class="btn btn-outline-info mb-3" type="submit">Ingresar</button>
+              <small class="text-muted ml-2">
+                  <a href="#">Olvidó contraseña?</a>
+              </small>
+          </div>
+      </form>
+      <div class="border-top pt-3">
+          <small class="text-muted">
+              Necesita una cuenta? <a class="ml-2" href="#">Registrar ahora</a>
+          </small>
+      </div>
+  </div>
+</div>
+
+{% endblock content %}

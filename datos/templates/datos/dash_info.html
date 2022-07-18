@@ -1,0 +1,22 @@
+{% load static %}
+{% block content %}
+
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'datos/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'datos/s1.css' %}">
+
+
+
+{% load plotly_dash %}
+{% plotly_header %}
+
+{% plotly_direct name='dash_info' %}
+
+{% plotly_footer %}
+
+
+
+
+
+{% endblock %}

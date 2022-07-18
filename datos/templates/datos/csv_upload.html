@@ -1,0 +1,55 @@
+{%  extends "datos/base.html" %}
+
+{% block content %}
+<br>
+
+<div class="row">
+	<div class="col">
+		<div class="col-md-4">
+			<div class="card text-center text-white  mb-3" id="database_info">
+			  	<div class="card-header">
+			  		<h5 class="card-title">Base de datos</h5>
+			  	</div>
+			  	<div class="card-body">
+
+					<table class="table table-sm">
+							<tr align="left">
+								<td>Fecha inicial:</td>
+								<td>{{date_from}}</td>
+							</tr>
+							<tr align="left">
+								<td>Fecha final:</td>
+								<td>{{date_to}}</td>
+							</tr>
+							<tr align="left">
+								<td>Total registros:</td>
+								<td>{{registros}}</td>
+							</tr>
+					</table>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<br><br>
+<div class="row">
+	<div class="col">
+		<div class="col-md-4">
+			<div class="card card-body">
+
+	      <p><b>Cargar archivo CSV:</b></p>
+	      <form method="post" enctype="multipart/form-data">
+	          {% csrf_token %}
+	          <input type="file" name="file"><br>
+	          <button type="submit" class="btn btn-primary mt-4">Upload</button>
+	      </form>
+	    </div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

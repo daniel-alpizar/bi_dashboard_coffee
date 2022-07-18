@@ -1,0 +1,24 @@
+{%  extends "datos/base.html" %}
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-body">
+
+
+			<p>¿Está seguro que desea borrar todos los datos?</p>
+
+			<form action="{% url 'delete_data' %}" method="POST">
+
+				{% csrf_token %}
+				<a class="btn btn-warning" href="{% url 'csv_upload' %}">Cancelar</a>
+
+				<input class="btn btn-danger" type="submit" name="confirm" value="Borrar">
+			</form>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
