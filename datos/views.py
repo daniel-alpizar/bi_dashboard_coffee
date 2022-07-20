@@ -125,14 +125,14 @@ def ExportView(request):
     context = {'form':form, 'title': 'Exportar datos'}
 
     if request.method == 'POST':
-        date_from = request.POST.get('date_from')
-        date_to = request.POST.get('date_to')
+        fecha_inicial = request.POST.get('fecha_inicial')
+        fecha_final = request.POST.get('fecha_final')
 
-        if date_from > date_to:
+        if fecha_inicial > fecha_final:
             messages.warning(request, "Error: Fecha inicial mayor que fecha final")
             return render(request, template, context)
 
-        check_queryset = Database.objects.filter(Fecha__range=(date_from, date_to))
+        check_queryset = Database.objects.filter(Fecha__range=(fecha_inicial, fecha_final))
         if len(check_queryset) > 0:
 
             #Exportar CSV
@@ -162,43 +162,64 @@ def IndexView(request):
 
 
 def DashInfoView(request):
-    context = {}
-    return render(request, 'datos/dash_info.html', context)
+    if all([Parcelas.objects.exists(), Geojson.objects.exists()]):
+        context = {}
+        return render(request, 'datos/dash_info.html', context)
+    else:
+        messages.warning(request, "No hay informacion topografica - Primero cargar datos")
+        return redirect('/datos/upload-csv/')
 
 
 def DashSemanaView(request):
-    context = {}
-    return render(request, 'datos/dash_semana.html', context)
+    if all([Database.objects.exists(), Parcelas.objects.exists(), Geojson.objects.exists()]):
+        context = {}
+        return render(request, 'datos/dash_semana.html', context)
+    else:
+        messages.warning(request, "Base de datos en blanco - Primero cargar datos")
+        return redirect('/datos/upload-csv/')
 
 
 def ChoroplethView(request):
-    parcelas = Parcelas.objects.all()
-    df = pd.DataFrame.from_records(parcelas.values())
+    if all([Database.objects.exists(), Geojson.objects.exists()]):
+        parcelas = Parcelas.objects.all()
+        df = pd.DataFrame.from_records(parcelas.values())
 
-    geojson = Geojson.objects.all().values('geojson').first().get('geojson')
-    geojson = json.loads(geojson)
+        geojson = Geojson.objects.all().values('geojson').first().get('geojson')
+        geojson = json.loads(geojson)
 
-    fig = plotly_choropleth(df, geojson)
+        fig = plotly_choropleth(df, geojson)
 
-    context = {'choropleth': fig}
-    return render(request, 'datos/choropleth.html', context)
+        context = {'choropleth': fig}
+        return render(request, 'datos/choropleth.html', context)
+    else:
+        messages.warning(request, "Base de datos en blanco - Primero cargar datos")
+        return redirect('/datos/upload-csv/')
+
 
 
 def TreemapView(request):
-    datos = Database.objects.all()
-    df = pd.DataFrame.from_records(datos.values())
+    if Database.objects.exists():
+        datos = Database.objects.all()
+        df = pd.DataFrame.from_records(datos.values())
 
-    fig = plotly_treemap_title(df)
+        fig = plotly_treemap_title(df)
 
-    context = {'treemap': fig}
-    return render(request, 'datos/treemap.html', context)
+        context = {'treemap': fig}
+        return render(request, 'datos/treemap.html', context)
+    else:
+        messages.warning(request, "Base de datos en blanco - Primero cargar datos")
+        return redirect('/datos/upload-csv/')
 
 
 def GanttView(request):
-    datos = Database.objects.all()
-    df = pd.DataFrame.from_records(datos.values())
+    if Database.objects.exists():
+        datos = Database.objects.all()
+        df = pd.DataFrame.from_records(datos.values())
 
-    fig = plotly_gantt(df)
+        fig = plotly_gantt(df)
 
-    context = {'gantt': fig}
-    return render(request, 'datos/gantt.html', context)
+        context = {'gantt': fig}
+        return render(request, 'datos/gantt.html', context)
+    else:
+        messages.warning(request, "Base de datos en blanco - Primero cargar datos")
+        return redirect('/datos/upload-csv/')

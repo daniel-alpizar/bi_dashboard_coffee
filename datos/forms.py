@@ -2,8 +2,8 @@ from django import forms
 
 
 class ExportSearchForm(forms.Form):
-    date_from = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    date_to = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    fecha_inicial = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    fecha_final = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
 
 report_choices = (
