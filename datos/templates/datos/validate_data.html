@@ -1,10 +1,6 @@
 {%  extends "datos/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}
-Validar datos
-{% endblock title %}
-
 {% block content %}
 
 <br>
@@ -27,7 +23,6 @@ Validar datos
 {% if df_check %}
   {{ df_check|safe }}
 {% else %}
-  <!-- <h3>No data</h3> -->
 {% endif %}
 </div>
 

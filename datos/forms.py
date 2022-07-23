@@ -6,6 +6,11 @@ class ExportSearchForm(forms.Form):
     fecha_final = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
 
+class DeleteSearchForm(forms.Form):
+    fecha_inicial = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    fecha_final = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+
 report_choices = (
     ('#1', '1. OTs sin Insumos'),
     ('#2', '2. Insumos sin Mano de Obra'),

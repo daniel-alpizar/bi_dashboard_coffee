@@ -7,14 +7,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Max, Min, Sum
+from django.db.models import Max, Min
 from .models import Database, Geojson, Parcelas
 from .pandas import db_process
 from .plotly import (plotly_treemap_title,
                     plotly_choropleth,
                     plotly_gantt,
                     plotly_treemap)
-from .forms import ExportSearchForm, ValidateSearchForm
+from .forms import DeleteSearchForm, ExportSearchForm, ValidateSearchForm
 from .pruebas import date_range, OTsinIN, INsinMO, MAQsinMO, MECsinMO
 
 
@@ -55,17 +55,6 @@ def ValidateDataView(request):
             messages.info(request, "No hay datos para el periodo seleccionado")
 
     return render(request, template, context)
-
-
-@login_required
-def DeleteDataView(request):
-    data = Database.objects.all()
-    if request.method == 'POST':
-        data.delete()
-        messages.info(request, "Datos eliminados")
-
-    context = {'title': 'Eliminar datos'}
-    return render(request, 'datos/delete_data.html', context)
 
 
 @login_required
@@ -114,6 +103,45 @@ def CsvUploadView(request):
         db_process(data_set)
         messages.info(request, 'Datos cargados satisfactoriamente')
         return redirect('/datos/upload-csv/')
+
+    return render(request, template, context)
+
+
+# @login_required
+# def DeleteDataView(request):
+#     data = Database.objects.all()
+#     if request.method == 'POST':
+#         data.delete()
+#         messages.info(request, "Datos eliminados")
+#
+#     context = {'title': 'Eliminar datos'}
+#     return render(request, 'datos/delete_data.html', context)
+
+
+@login_required
+def DeleteDataView(request):
+    template = 'datos/delete_data.html'
+    fecha_inicial, fecha_final = date_range()
+    form = DeleteSearchForm(request.POST or None, initial={'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final})
+    context = {'form':form, 'title': 'Eliminar datos'}
+
+    if request.method == 'POST':
+        fecha_inicial = request.POST.get('fecha_inicial')
+        fecha_final = request.POST.get('fecha_final')
+
+        if fecha_inicial > fecha_final:
+            messages.warning(request, "Error: Fecha inicial mayor que fecha final")
+            return render(request, template, context)
+
+        check_queryset = Database.objects.filter(Fecha__range=(fecha_inicial, fecha_final))
+        if len(check_queryset) > 0:
+
+            # Delete database rows included in range date
+            Database.objects.filter(Fecha__range=(fecha_inicial, fecha_final)).delete()
+            messages.warning(request, "Datos eliminados")
+
+        else:
+            messages.warning(request, "No hay datos para el periodo seleccionado")
 
     return render(request, template, context)
 

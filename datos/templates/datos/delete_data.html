@@ -1,7 +1,9 @@
 {%  extends "datos/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block content %}
 
-<br>
+<!-- <br>
 <div class="row">
 	<div class="col-md-4">
 		<div class="card card-body">
@@ -18,7 +20,24 @@
 			</form>
 		</div>
 	</div>
-</div>
+</div> -->
 
+<br>
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-body">
+
+      <p><b>Eliminar datos:</b></p>
+      <form action="" method="POST">
+          {% csrf_token %}
+          {{ form|crispy }}
+					<br>
+					<p>¿Está seguro que desea borrar los datos?</p>
+					<a class="btn btn-secondary" href="{% url 'csv_upload' %}">Cancelar</a>
+          <button type="submit" class="btn btn-danger" name="confirm">Borrar</button>
+      </form>
+    </div>
+	</div>
+</div>
 
 {% endblock %}
