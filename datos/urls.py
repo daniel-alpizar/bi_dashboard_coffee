@@ -1,5 +1,6 @@
 from django.urls import include, path
 from .views import (
+    CsvCheckView,
     CsvUploadView,
     ValidateDataView,
     ExportView,
@@ -15,6 +16,7 @@ from . import dash_info
 from . import dash_semana
 
 urlpatterns = [
+    path('check-csv/', CsvCheckView, name="csv_check"),
     path('upload-csv/', CsvUploadView, name="csv_upload"),
     path('validate-data/', ValidateDataView, name="validate_data"),
     path('export-csv/', ExportView, name="csv_export"),

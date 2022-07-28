@@ -22,3 +22,8 @@ class ValidateSearchForm(forms.Form):
     fecha_inicial = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     fecha_final = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     reporte = forms.ChoiceField(choices=report_choices)
+
+
+class CheckSearchForm(forms.Form):
+    fecha_inicial = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    fecha_final = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))

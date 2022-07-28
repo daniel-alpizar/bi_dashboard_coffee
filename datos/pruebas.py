@@ -49,7 +49,7 @@ c3 = 'background-color: lightsteelblue'
 
 
 
-# 1. Reporte OTs sin Insumos
+# 1.1 Reporte OTs sin Insumos
 def OTsinIN(df_check):
     '''Reporte (dataframe) de OTs (labores_IN) con insumos faltantes'''
 
@@ -82,7 +82,7 @@ def OTsinIN(df_check):
     return df
 
 
-# 2. Reporte Insumos sin Mano de Obra
+# 1.2 Reporte Insumos sin Mano de Obra
 def INsinMO(df_check):
     '''Reporte (dataframe) de insumos (IN_Uds) sin mano de obra (MO_Hrs)'''
 
@@ -123,7 +123,7 @@ def INsinMO(df_check):
     return df
 
 
-# 3. Reporte de MAQ_Hrs sin MO_Hrs
+# 1.3 Reporte de MAQ_Hrs sin MO_Hrs
 def MAQsinMO(df_check):
     '''Reporte (dataframe) de maquinaria (MAQ_Hrs) sin mano de obra (MO_Hrs)'''
 
@@ -156,7 +156,7 @@ def MAQsinMO(df_check):
     return df
 
 
-# 4. Reporte Mecanizado sin MO_Hrs o MAQ_Hrs
+# 1.4 Reporte Mecanizado sin MO_Hrs o MAQ_Hrs
 def MECsinMO(df_check):
     '''Reporte (dataframe) de modo mecanizado sin mano de obra (MO_Hrs) o maquinaria (MAQ_Hrs)'''
 
@@ -192,3 +192,82 @@ def MECsinMO(df_check):
                 .set_caption('Reporte: Mecanizado sin MO o MAQ'))
 
     return df
+
+
+# 2.1 Reporte 'Items' duplicados
+def ItemDup(df_check):
+    '''Reporte (dataframe) de transacciones (invoices) con items duplicados (insumos o datos)'''
+
+    df = df_check
+    df.set_axis(['Trans', 'Fecha', 'Tipo', 'Cuenta', 'Labor', 'Modo', 'Factor',
+                'Item', 'Parcela', 'Uds', 'Monto'], axis=1, inplace=True)
+    df = df[df['Tipo'] == 'Invoice']
+    df['Fecha'] = df['Fecha'].dt.strftime('%Y-%m-%d')
+    df['Uds'] = df['Uds'].abs()
+    df['Monto'] = df['Monto'].abs()
+    df = df[df.duplicated(subset=['Trans','Item'], keep=False)]
+
+    def highlight_cols(x):
+        mask1 = (x['Item'] != 0)
+        df_high = pd.DataFrame(data='', index=df.index, columns=df.columns)
+        df_high.loc[mask1, ['Fecha','Item','Parcela']] = c1
+
+        return df_high
+
+
+    cols_text = ['Trans', 'Fecha', 'Tipo', 'Cuenta', 'Labor', 'Modo', 'Item', 'Parcela']
+    cols_amount = ['Uds', 'Monto']
+    text_props = {'min-width': '90px', 'text-align': 'center', 'font-size': '10pt'}
+    amount_props = {'min-width': '70px', 'text-align': 'right', 'font-size': '10pt'}
+
+    df_high = (df.style
+        .hide_index()
+        .hide_columns(['Factor'])
+        .format(precision=0, thousands=",")
+        .set_table_styles(styles)
+        .apply(highlight_cols, axis=None)
+        .set_properties(subset=cols_text, **text_props)
+        .set_properties(subset=cols_amount, **amount_props)
+        .set_caption('Invoices: Items duplicados'))
+
+    return df_high.to_html() if len(df) > 0 else None
+
+
+# 2.2 Reporte Horas Semanales
+def HrsSem(df_check):
+    '''Reporte (dataframe) de empleados (source name) con 70+ horas semanales'''
+
+    df = df_check
+    df.set_axis(['Trans', 'Semana', 'Tipo', 'Cuenta', 'Labor', 'Modo', 'Nombre',
+                    'Item', 'Parcela', 'Horas', 'Monto'], axis=1, inplace=True)
+    df = df[df['Tipo'] == 'Paycheck']
+    df['Horas'] = df['Horas'].abs()
+
+    df = df.groupby(['Semana', 'Nombre']).agg(Horas=('Horas', sum))
+    df.reset_index(inplace=True)
+    df = df[df['Horas'] > 65]
+    df['Semana'] = df['Semana'].dt.strftime('%Y-%m-%d')
+
+    def highlight_cols(x):
+        mask1 = (x['Horas'] != 0)
+        df_high = pd.DataFrame(data='', index=df.index, columns=df.columns)
+        df_high.loc[mask1, ['Horas']] = c1
+
+        return df_high
+
+
+    cols_text = ['Semana', 'Nombre']
+    cols_amount = ['Horas']
+    text_props = {'min-width': '200px', 'text-align': 'center', 'font-size': '10pt'}
+    amount_props = {'min-width': '70px', 'text-align': 'center', 'font-size': '10pt'}
+
+    df_high = (df.style
+        .hide_index()
+        .format(precision=0, thousands=",")
+        .set_table_styles(styles)
+        .apply(highlight_cols, axis=None)
+        .set_properties(subset=cols_text, **text_props)
+        .set_properties(subset=cols_amount, **amount_props)
+        .set_caption('Reporte Semanal +65 Hrs'))
+
+    return df_high.to_html() if len(df) > 0 else None

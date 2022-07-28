@@ -42,8 +42,9 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle" href="#" data-bs-toggle="dropdown"> Datos </a>
                            <ul class="dropdown-menu">
+                           <li><a class="dropdown-item" href="{% url 'csv_check' %}"> Revisar CSV </a></li>
                            <li><a class="dropdown-item" href="{% url 'csv_upload' %}"> Cargar </a></li>
-                           <li><a class="dropdown-item" href="{% url 'validate_data' %}"> Validar </a></li>
+                           <li><a class="dropdown-item" href="{% url 'validate_data' %}"> Validar OTs</a></li>
                            <li><a class="dropdown-item" href="{% url 'csv_export' %}"> Exportar </a></li>
                            <li><a class="dropdown-item" href="{% url 'delete_data' %}"> Eliminar </a></li>
                            </ul>

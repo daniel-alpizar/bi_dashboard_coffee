@@ -14,8 +14,8 @@ from .plotly import (plotly_treemap_title,
                     plotly_choropleth,
                     plotly_gantt,
                     plotly_treemap)
-from .forms import DeleteSearchForm, ExportSearchForm, ValidateSearchForm
-from .pruebas import date_range, OTsinIN, INsinMO, MAQsinMO, MECsinMO
+from .forms import DeleteSearchForm, ExportSearchForm, ValidateSearchForm, CheckSearchForm
+from .pruebas import date_range, OTsinIN, INsinMO, MAQsinMO, MECsinMO, ItemDup, HrsSem
 
 
 def database_info(request):
@@ -25,6 +25,71 @@ def database_info(request):
 
     context = {'date_from': date_from, 'date_to': date_to}
     return render(request, 'datos/csv_upload.html', context)
+
+
+@login_required
+def CsvCheckView(request):
+    '''Verifica si archivo CSV posee items duplicados (ItemDup) o horas semanales elevadas (HrsSem)'''
+
+    template = 'datos/check_data.html'
+    fecha_inicial, fecha_final = date_range()
+    form = CheckSearchForm(request.POST or None, initial={'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final})
+    context = {'form':form, 'title': 'Revisar CSV'}
+
+    try:
+        if request.method == 'POST':
+            fecha_inicial = request.POST.get('fecha_inicial')
+            fecha_final = request.POST.get('fecha_final')
+
+            if fecha_inicial > fecha_final:
+                messages.warning(request, "Error: Fecha inicial mayor que fecha final")
+                return render(request, template, context)
+
+            csv_file = request.FILES['file']
+
+            if not csv_file.name.endswith('.CSV'):
+                messages.warning(request, 'No es un archivo CSV')
+                return render(request, template)
+
+
+            data_set = csv_file.read().decode('latin1')
+
+            # loop through new data and load to dataframe
+            io_string = io.StringIO(data_set)
+
+            datos = []
+            for column in csv.reader(io_string):
+                dato = [column[0],
+                        column[1],
+                        column[2],
+                        column[3],
+                        column[4],
+                        column[5],
+                        column[6],
+                        column[7],
+                        column[8],
+                        column[9] or 0,
+                        column[10]]
+                datos.append(dato)
+
+            data_set = pd.read_csv(datos, skiprows=[1], skipfooter=1, encoding='latin1',
+                                    parse_dates=[1], engine='python')
+            data_set = data_set[(data_set.iloc[:,1] >= fecha_inicial) & (data_set.iloc[:,1] <= fecha_final)]
+
+            if len(data_set) > 0:
+                # Aplicar funciones para procesar datos
+                df_check1 = ItemDup(data_set)
+                df_check2 = HrsSem(data_set)
+
+                context = {'form': form, 'df_check1': df_check1, 'df_check2': df_check2, 'title': 'Revisar CSV'}
+
+            else:
+                messages.warning(request, "No hay datos para el periodo seleccionado")
+
+    except:
+        messages.warning(request, 'No se seleccionó ningún archivo')
+
+    return render(request, template, context)
 
 
 @login_required
@@ -67,55 +132,47 @@ def CsvUploadView(request):
     registros = Database.objects.count()
     context = {'date_from': date_from, 'date_to': date_to, 'registros': registros, 'title': 'Cargar datos'}
 
-    # GET request returns the value of the data with the specified key.
-    if request.method == 'POST':
+    try:
+        if request.method == 'POST':
 
-        csv_file = request.FILES['file']
+            csv_file = request.FILES['file']
 
-        if not csv_file.name.endswith('.CSV'):
-            messages.warning(request, 'No es un archivo CSV')
-            return render(request, template)
+            if not csv_file.name.endswith('.CSV'):
+                messages.warning(request, 'No es un archivo CSV')
+                return render(request, template)
 
-        data_set = csv_file.read().decode('latin1')
+            data_set = csv_file.read().decode('latin1')
 
-        # loop through new data and load to dataframe
-        io_string = io.StringIO(data_set)
+            # loop through new data and load to dataframe
+            io_string = io.StringIO(data_set)
 
-        datos = []
-        for column in csv.reader(io_string):
-            dato = [column[0],
-                    column[1],
-                    column[2],
-                    column[3],
-                    column[4],
-                    column[5],
-                    column[6],
-                    column[7],
-                    column[8],
-                    column[9] or 0,
-                    column[10]]
-            datos.append(dato)
+            datos = []
+            for column in csv.reader(io_string):
+                dato = [column[0],
+                        column[1],
+                        column[2],
+                        column[3],
+                        column[4],
+                        column[5],
+                        column[6],
+                        column[7],
+                        column[8],
+                        column[9] or 0,
+                        column[10]]
+                datos.append(dato)
 
-        data_set = pd.read_csv(datos, skiprows=[1], skipfooter=1, encoding='latin1',
-                                parse_dates=[1], engine='python')
+            data_set = pd.read_csv(datos, skiprows=[1], skipfooter=1, encoding='latin1',
+                                    parse_dates=[1], engine='python')
 
-        # Aplicar funcion para procesar datos
-        db_process(data_set)
-        messages.info(request, 'Datos cargados satisfactoriamente')
-        return redirect('/datos/upload-csv/')
+            # Aplicar funcion para procesar datos
+            db_process(data_set)
+            messages.info(request, 'Datos cargados satisfactoriamente')
+            return redirect('/datos/upload-csv/')
+
+    except:
+        messages.warning(request, 'No se seleccionó ningún archivo')
 
     return render(request, template, context)
-
-
-# @login_required
-# def DeleteDataView(request):
-#     data = Database.objects.all()
-#     if request.method == 'POST':
-#         data.delete()
-#         messages.info(request, "Datos eliminados")
-#
-#     context = {'title': 'Eliminar datos'}
-#     return render(request, 'datos/delete_data.html', context)
 
 
 @login_required

@@ -1,0 +1,44 @@
+{%  extends "datos/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-4">
+		<div class="card card-body">
+      <p><b>Revisar CSV:</b></p>
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" name="file"><br><br>
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary mt-4">Revisar</button>
+      </form>
+    </div>
+	</div>
+</div>
+<br><br>
+
+<div class="container">
+	<div class="row">
+		{% if df_check1 %}
+		  {{ df_check1|safe }}
+		{% else %}
+		{% endif %}
+	</div>
+</div>
+<br
+<div class="container">
+	<div class="row">
+		<div class="col"></div>
+		<div class="col">
+			{% if df_check2 %}
+			  {{ df_check2|safe }}
+			{% else %}
+			{% endif %}
+		</div>
+		<div class="col"></div>
+	</div><br><br>
+</div>
+
+{% endblock %}
