@@ -11,7 +11,6 @@ def date_range():
     today = date.today()
     offset = (today.weekday() - 3) % 7
     last_thu = np.datetime64(today - timedelta(days=offset))
-    last_thu = last_thu - 7 if last_thu == date.today() else last_thu
     last_fri = last_thu - 6
 
     return last_fri, last_thu
