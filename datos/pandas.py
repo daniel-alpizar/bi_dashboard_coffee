@@ -26,7 +26,7 @@ def db_process(data_set):
     # Eliminar duplicados cosecha distribuidos por parcelas (Eliminar ZG:General)
     df = df[~((df['Cuenta'].str.contains('40100')) & (df['Parcela'] == 'ZG:General'))]
     df_rec = df[((df['Cuenta'].str.contains('50502')) & (df['Tipo'] == 'General Journal') & (df['Parcela'] != 'ZG:General'))]
-    df = df[~(df['Cuenta'].str.contains('50501|50502'))]
+    # df = df[~(df['Cuenta'].str.contains('50501|50502'))]   # Excluye costos de recoleccion
     df = pd.concat([df, df_rec], ignore_index=True, axis=0)
 
     # Eliminar diferencias de inventario de insumos

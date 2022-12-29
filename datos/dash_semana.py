@@ -287,14 +287,20 @@ def update_graph(drop_actividad):
     else:
         df2 = df1[df1['Actividad'] == drop_actividad]
 
-
     fig = px.choropleth_mapbox(df2, geojson=geojson, color="MO_ha",
                                locations="Parcela", featureidkey="properties.name",
                                center={'lat': 10.098, 'lon': -84.229},
                                color_continuous_scale='RdYlGn_r',
-                               hover_name="Parcela",
-                               hover_data={"Parcela":True, "Actividad":False},
-                               mapbox_style='open-street-map', zoom=13.1)
+                               mapbox_style='open-street-map',
+                               zoom=13.1,
+                               custom_data=[df2.Parcela, df2.MO_ha, df2.IN_ha, df2.CRC_ha])
+
+    hovertemp = "<b>%{customdata[0]} </b> <br><br>"
+    hovertemp += "MO_Ha: %{customdata[1]:.1f} <br>"
+    hovertemp += "IN_Ha: %{customdata[2]:.1f} <br>"
+    hovertemp += "CRC_Ha: %{customdata[3]:,f} <br>"
+    fig.update_traces(hovertemplate=hovertemp)
+    
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 44, 'r': 0},
             font=dict(color='white'),
             hovermode='closest',

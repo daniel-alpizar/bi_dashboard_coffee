@@ -234,7 +234,7 @@ def ItemDup(df_check):
 
 # 2.2 Reporte Horas Semanales
 def HrsSem(df_check):
-    '''Reporte (dataframe) de empleados (source name) con 70+ horas semanales'''
+    '''Reporte (dataframe) de empleados (source name) con 60+ horas semanales'''
 
     df = df_check
     df.set_axis(['Trans', 'Semana', 'Tipo', 'Cuenta', 'Labor', 'Modo', 'Nombre',
@@ -244,7 +244,7 @@ def HrsSem(df_check):
 
     df = df.groupby(['Semana', 'Nombre']).agg(Horas=('Horas', sum))
     df.reset_index(inplace=True)
-    df = df[df['Horas'] > 65]
+    df = df[df['Horas'] > 60]
     df['Semana'] = df['Semana'].dt.strftime('%Y-%m-%d')
 
     def highlight_cols(x):
@@ -267,6 +267,6 @@ def HrsSem(df_check):
         .apply(highlight_cols, axis=None)
         .set_properties(subset=cols_text, **text_props)
         .set_properties(subset=cols_amount, **amount_props)
-        .set_caption('Reporte Semanal +65 Hrs'))
+        .set_caption('Reporte Semanal +60 Hrs'))
 
     return df_high.to_html() if len(df) > 0 else None

@@ -1,0 +1,47 @@
+[33mcommit e3a682bbad200b35eb85f10a12f7662a1053e7bf[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31mheroku/master[m[33m)[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Thu Jul 28 21:09:43 2022 -0600
+
+    Ajustes menores
+
+[33mcommit e8d4502a784678fe60858d05566f79f2ad07a586[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Wed Jul 27 18:35:07 2022 -0600
+
+    Revision previa CSV
+
+[33mcommit 66d4c7393eb447956fb401abe7edf9ae043dd1fa[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Fri Jul 22 21:23:13 2022 -0600
+
+    Solving Dash_Semana refresh on new data
+
+[33mcommit a0bd3d30856f4ab32576ef5d8b58e34ecefc155e[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Tue Jul 19 21:09:01 2022 -0600
+
+    Incluir condicional base datos vacia
+
+[33mcommit 1785da88e59bcde5512f26ae01a932231c9a7e7c[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Mon Jul 18 04:49:18 2022 -0600
+
+    Adding access to change password
+
+[33mcommit 3f690efe51cd68549936e2e789a9b73cca71f8a4[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Sun Jul 17 22:21:51 2022 -0600
+
+    Correccion plotly charts to.html
+
+[33mcommit 0e2535e429935ffc819f76a565f8c851c1f4e4cb[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Sun Jul 17 22:15:41 2022 -0600
+
+    Prueba plotly chart
+
+[33mcommit 4a968153e36ad1dab074e9413a52f352d3055a17[m
+Author: Daniel Alpizar <dalpizar@gmail.com>
+Date:   Sun Jul 17 20:39:34 2022 -0600
+
+    Initial commit

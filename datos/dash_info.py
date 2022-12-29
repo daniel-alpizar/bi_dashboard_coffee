@@ -310,9 +310,16 @@ def update_graph(drop_parcelas):
                                locations="parcela", featureidkey="properties.name",
                                center={'lat': 10.098, 'lon': -84.229},
                                color_continuous_scale='RdYlGn_r',
-                               hover_name="parcela",
-                               hover_data={"variedad":True, "altitud":True, "parcela":False},
-                               mapbox_style='open-street-map', zoom=13.1)
+                               mapbox_style='open-street-map',
+                               zoom=13.1,
+                               custom_data=[df1.parcela, df1.area, df1.altitud, df1.edad])
+
+    hovertemp = "<b>%{customdata[0]} </b> <br><br>"
+    hovertemp += "Area: %{customdata[1]:.1f} <br>"
+    hovertemp += "Altitud: %{customdata[2]:,f} <br>"
+    hovertemp += "Edad: %{customdata[3]} <br>"
+    fig.update_traces(hovertemplate=hovertemp)
+
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 50, 'r': 0},
             font=dict(color='white'),
             hovermode='closest',
@@ -366,7 +373,7 @@ def update_graph(drop_parcelas):
             center={'lat': 10.098, 'lon': -84.23},
             color_continuous_scale='RdYlGn_r',
             hover_name="parcela",
-            hover_data={"variedad":True, "altitud":True, "parcela":False},
+            hover_data={"variedad":True, "altitud":False, "parcela":False},
             mapbox_style='open-street-map', zoom=13.05,
             )
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 50, 'r': 0},
