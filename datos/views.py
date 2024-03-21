@@ -34,7 +34,7 @@ msg_no_datos = 'No hay datos para el periodo seleccionado'
 msg_db_blanco = 'Base de datos en blanco - Primero cargar datos'
 
 
-@login_required
+# @login_required
 def CsvCheckView(request):
     '''Verifica si archivo CSV posee items duplicados (ItemDup) o horas semanales elevadas (HrsSem)'''
 
@@ -102,7 +102,7 @@ def CsvCheckView(request):
     return render(request, template, context)
 
 
-@login_required
+# @login_required
 def CsvUploadView(request):
     '''Procesa y carga archivo CSV a base de datos'''
 
@@ -157,7 +157,7 @@ def CsvUploadView(request):
     return render(request, template, context)
 
 
-@login_required
+# @login_required
 def ValidateDataView(request):
     '''Aplica pruebas de validación al rango de fechas seleccionado'''
 
@@ -189,7 +189,7 @@ def ValidateDataView(request):
     return render(request, template, context)
 
 
-@login_required
+# @login_required
 def ExportView(request):
     '''Exporta datos seleccionados en formato CSV'''
 
